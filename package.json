@@ -1,0 +1,15 @@
+{
+  "name": "jiraloglist",
+  "version": "1.0.0",
+  "description": "Small script that uses the jira REST API to get a quick overview of how much time was logged in a given timeframe per person",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Felix Maier <leschekfm@web.de>",
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.17.0",
+    "request": "^2.79.0"
+  }
+}
