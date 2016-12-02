@@ -30,16 +30,17 @@ req.get({
         for (log of issue.fields.worklog.worklogs) {
             const created = moment(log.created)
             debug('log entry created', created)
-            if (created.isAfter(dayToCheck) && created.isBefore(moment(dayToCheck).add(1,'d'))) {
+            if (created.isAfter(dayToCheck) && created.isBefore(moment(dayToCheck).add(1, 'd'))) {
                 debug(`${log.author.name} Logged ${log.timeSpent} on issue ${issue.fields.summary}`)
                 if (!(log.author.name in tracking)) {
-                    tracking[log.author.name] = {}
+                    tracking[log.author.name] = { timeSpent: 0, issues: {} }
                 }
+                tracking[log.author.name].timeSpent += log.timeSpentSeconds
                 if (!(issue.key in tracking[log.author.name])) {
-                    tracking[log.author.name][issue.key] = { desc: issue.fields.summary, timeSpent: log.timeSpentSeconds }
+                    tracking[log.author.name].issues[issue.key] = { desc: issue.fields.summary, timeSpent: log.timeSpentSeconds }
                 }
                 else {
-                    tracking[log.author.name][issue.key].timeSpent += log.timeSpentSeconds
+                    tracking[log.author.name].issues[issue.key].timeSpent += log.timeSpentSeconds
                 }
             }
             debug(`${log.author.name} Logged ${log.timeSpent} on issue ${issue.fields.summary}`)
@@ -50,9 +51,10 @@ req.get({
 
     console.log('WORKLOG')
     for (user in tracking) {
-        console.log('For: ' + user)
-        for (issue in tracking[user]) {
-            console.log(`${issue} - ${tracking[user][issue].desc}: ${tracking[user][issue].timeSpent / 60} mins`)
+        const totalHours = tracking[user].timeSpent / 60 / 60
+        console.log(`${user} logged ${totalHours.toFixed(1)}h`)
+        for (issue in tracking[user].issues) {
+            console.log(`${issue} - ${tracking[user].issues[issue].desc}: ${tracking[user].issues[issue].timeSpent / 60} mins`)
         }
     }
 
