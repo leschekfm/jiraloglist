@@ -1,6 +1,11 @@
 const request = require('request')
 const moment = require('moment')
 const debug = require('debug')('jiraloglist')
+const program = require('commander')
+
+program
+    .option('-d, --day-to-check [dayToCheck]', 'day to check in format "YYYY-MM-DD"', moment().startOf('day').subtract(1, 'd'))
+    .parse(process.argv)
 
 const baseUrl = "https://maloon.atlassian.net/rest/api/2/"
 
@@ -13,8 +18,9 @@ const req = request.defaults({
 })
 
 let tracking = {}
-const yesterday = moment().startOf('day').subtract(1, 'd')
-const dayToCheck = yesterday // will get an option to be overriden by a param
+
+const dayToCheck = moment(program.dayToCheck)
+debug('dayToCheck', dayToCheck)
 
 req.get({
     uri: 'search',
@@ -49,7 +55,7 @@ req.get({
 
     debug('result object', tracking)
 
-    console.log('WORKLOG')
+    console.log(`WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')}`)
     for (user in tracking) {
         const totalHours = tracking[user].timeSpent / 60 / 60
         console.log(`${user} logged ${totalHours.toFixed(1)}h`)
