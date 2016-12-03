@@ -2,17 +2,22 @@ const request = require('request')
 const moment = require('moment')
 const debug = require('debug')('jiraloglist')
 const program = require('commander')
+const rc = require('rc')
 
 program
     .option('-d, --day-to-check [dayToCheck]', 'day to check in format "YYYY-MM-DD"', moment().startOf('day').subtract(1, 'd'))
     .parse(process.argv)
 
-const baseUrl = 'https://maloon.atlassian.net/rest/api/2/'
+const config = rc('jiraloglist', {})
+
+debug('config', config)
+
+const baseUrl = config.url + '/rest/api/2/'
 
 const req = request.defaults({
   auth: {
-    user: process.env.JIRAUSER,
-    pass: process.env.JIRAPASS
+    user: config.user,
+    pass: config.pass
   },
   baseUrl: baseUrl
 })
@@ -25,7 +30,7 @@ debug('dayToCheck', dayToCheck)
 req.get({
   uri: 'search',
   qs: {
-    jql: `updated > ${dayToCheck.format('YYYY-MM-DD')} and project in (CMD) and timespent > 0`,
+    jql: `updated > ${dayToCheck.format('YYYY-MM-DD')} and project in (${config.projects}) and timespent > 0`,
     fields: 'summary,worklog',
     maxResults: 1000
   }
