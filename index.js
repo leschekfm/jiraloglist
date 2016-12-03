@@ -30,10 +30,14 @@ req.get({
     maxResults: 1000
   }
 }, (err, res, body) => {
+  if (err) {
+    throw new Error(err)
+  }
+
   const response = JSON.parse(body)
 
-  for (issue of response.issues) {
-    for (log of issue.fields.worklog.worklogs) {
+  for (const issue of response.issues) {
+    for (const log of issue.fields.worklog.worklogs) {
       const created = moment(log.created)
       debug('log entry created', created)
       if (created.isAfter(dayToCheck) && created.isBefore(moment(dayToCheck).add(1, 'd'))) {
@@ -55,10 +59,10 @@ req.get({
   debug('result object', tracking)
 
   console.log(`WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')}`)
-  for (user in tracking) {
+  for (const user in tracking) {
     const totalHours = tracking[user].timeSpent / 60 / 60
     console.log(`${user} logged ${totalHours.toFixed(1)}h`)
-    for (issue in tracking[user].issues) {
+    for (const issue in tracking[user].issues) {
       console.log(`${issue} - ${tracking[user].issues[issue].desc}: ${tracking[user].issues[issue].timeSpent / 60} mins`)
     }
   }
