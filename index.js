@@ -5,8 +5,8 @@ const program = require('commander')
 const rc = require('rc')
 
 program
-    .option('-d, --day-to-check [dayToCheck]', 'day to check in format "YYYY-MM-DD"', moment().startOf('day').subtract(1, 'd'))
-    .parse(process.argv)
+  .option('-d, --day-to-check [dayToCheck]', 'day to check in format "YYYY-MM-DD"', moment().startOf('day').subtract(1, 'd'))
+  .parse(process.argv)
 
 const config = rc('jiraloglist', {})
 
@@ -63,12 +63,18 @@ req.get({
 
   debug('result object', tracking)
 
-  console.log(`WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')}`)
-  for (const user in tracking) {
-    const totalHours = tracking[user].timeSpent / 60 / 60
-    console.log(`${user} logged ${totalHours.toFixed(1)}h`)
-    for (const issue in tracking[user].issues) {
-      console.log(`${issue} - ${tracking[user].issues[issue].desc}: ${tracking[user].issues[issue].timeSpent / 60} mins`)
+  function generateMessage (tracking) {
+    let message = ''
+    message += `WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')}\n`
+    for (const user in tracking) {
+      const totalHours = tracking[user].timeSpent / 60 / 60
+      message += `${user} logged ${totalHours.toFixed(1)}h\n`
+      for (const issue in tracking[user].issues) {
+        message += `${issue} - ${tracking[user].issues[issue].desc}: ${tracking[user].issues[issue].timeSpent / 60} mins\n`
+      }
     }
+    return message
   }
+
+  console.dir(generateMessage(tracking))
 })
