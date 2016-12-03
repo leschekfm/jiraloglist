@@ -36,8 +36,8 @@ req.get({
         for (log of issue.fields.worklog.worklogs) {
             const created = moment(log.created)
             debug('log entry created', created)
-            if (created.isAfter(dayToCheck) && created.isBefore(moment(dayToCheck).add(1, 'd'))) {
-                debug(`${log.author.name} Logged ${log.timeSpent} on issue ${issue.fields.summary}`)
+            if (created.isAfter(dayToCheck) && created.isBefore(moment(dayToCheck).add(1,'d'))) {
+                debug('entry is in the specified range')
                 if (!(log.author.name in tracking)) {
                     tracking[log.author.name] = { timeSpent: 0, issues: {} }
                 }
