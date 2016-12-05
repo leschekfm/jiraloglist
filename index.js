@@ -7,6 +7,7 @@ const WebClient = require('@slack/client').WebClient
 
 program
   .option('-d, --day-to-check [dayToCheck]', 'day to check in format "YYYY-MM-DD"', moment().startOf('day').subtract(1, 'd'))
+  .option('-r, --range [range]', 'time range in days', 1)
   .parse(process.argv)
 
 const config = rc('jiraloglist', {})
@@ -46,7 +47,7 @@ req.get({
     for (const log of issue.fields.worklog.worklogs) {
       const created = moment(log.created)
       debug('log entry created', created)
-      if (created.isAfter(dayToCheck) && created.isBefore(moment(dayToCheck).add(1, 'd'))) {
+      if (created.isAfter(dayToCheck) && created.isBefore(moment(dayToCheck).add(program.range, 'd'))) {
         debug('entry is in the specified range')
         if (!(log.author.name in tracking)) {
           tracking[log.author.name] = { timeSpent: 0, issues: {} }
@@ -66,7 +67,7 @@ req.get({
 
   function generateMessage (tracking) {
     let message = ''
-    message += `WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')}\n`
+    message += `WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')} to ${moment(dayToCheck).add(program.range, 'd').format('YYYY-MM-DD')}\n`
     for (const user in tracking) {
       const totalHours = tracking[user].timeSpent / 60 / 60
       message += `${user} logged ${totalHours.toFixed(1)}h\n`
@@ -79,7 +80,7 @@ req.get({
 
   function generateSlackMessage (tracking, config) {
     const message = {
-      text: `WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')}`,
+      text: `WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')} to ${moment(dayToCheck).add(program.range, 'd').format('YYYY-MM-DD')}`,
       attachments: []
     }
     for (const user in tracking) {
@@ -112,7 +113,7 @@ req.get({
     })
   }
 
-  if (config.slack.token) {
+  if (config.slack) {
     const message = generateSlackMessage(tracking, config)
     sendSlackmessage(message, config)
   } else {
