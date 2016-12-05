@@ -3,10 +3,11 @@ const moment = require('moment')
 const debug = require('debug')('jiraloglist')
 const program = require('commander')
 const rc = require('rc')
+const WebClient = require('@slack/client').WebClient
 
 program
-    .option('-d, --day-to-check [dayToCheck]', 'day to check in format "YYYY-MM-DD"', moment().startOf('day').subtract(1, 'd'))
-    .parse(process.argv)
+  .option('-d, --day-to-check [dayToCheck]', 'day to check in format "YYYY-MM-DD"', moment().startOf('day').subtract(1, 'd'))
+  .parse(process.argv)
 
 const config = rc('jiraloglist', {})
 
@@ -63,12 +64,58 @@ req.get({
 
   debug('result object', tracking)
 
-  console.log(`WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')}`)
-  for (const user in tracking) {
-    const totalHours = tracking[user].timeSpent / 60 / 60
-    console.log(`${user} logged ${totalHours.toFixed(1)}h`)
-    for (const issue in tracking[user].issues) {
-      console.log(`${issue} - ${tracking[user].issues[issue].desc}: ${tracking[user].issues[issue].timeSpent / 60} mins`)
+  function generateMessage (tracking) {
+    let message = ''
+    message += `WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')}\n`
+    for (const user in tracking) {
+      const totalHours = tracking[user].timeSpent / 60 / 60
+      message += `${user} logged ${totalHours.toFixed(1)}h\n`
+      for (const issue in tracking[user].issues) {
+        message += `${issue} - ${tracking[user].issues[issue].desc}: ${tracking[user].issues[issue].timeSpent / 60} mins\n`
+      }
     }
+    return message
+  }
+
+  function generateSlackMessage (tracking, config) {
+    const message = {
+      text: `WORKLOG for: ${dayToCheck.format('YYYY-MM-DD')}`,
+      attachments: []
+    }
+    for (const user in tracking) {
+      const attachment = {}
+      const fields = []
+      const totalHours = tracking[user].timeSpent / 60 / 60
+      attachment.title = `${user} logged ${totalHours.toFixed(1)}h\n`
+      attachment.color = totalHours >= 5 ? 'good' : 'warning'
+      for (const issue in tracking[user].issues) {
+        fields.push({
+          title: `${issue} - ${tracking[user].issues[issue].desc}`,
+          value: `${tracking[user].issues[issue].timeSpent / 60} mins\n`,
+          short: true
+        })
+      }
+      attachment.fields = fields
+      message.attachments.push(attachment)
+    }
+    return message
+  }
+
+  function sendSlackmessage (message, config) {
+    const web = new WebClient(config.slack.token)
+    debug(message)
+    web.chat.postMessage(config.slack.channel, message.text, message, (err, res) => {
+      if (err) {
+        throw new Error(err)
+      }
+      debug(res)
+    })
+  }
+
+  if (config.slack.token) {
+    const message = generateSlackMessage(tracking, config)
+    sendSlackmessage(message, config)
+  } else {
+    console.dir(generateMessage(tracking))
   }
 })
