@@ -3,7 +3,7 @@ const rc = require('rc')
 
 const config = rc('jiraloglist', {})
 
-const agenda = new Agenda({db: {address: config.mongo}});
+const agenda = new Agenda({db: {address: config.mongo}})
 
 const jiraloglist = require('./lib/jiraloglist')
 
@@ -16,16 +16,16 @@ const jiraloglist = require('./lib/jiraloglist')
 // or pass in an existing mongodb-native MongoClient instance
 // var agenda = new Agenda({mongo: myMongoClient});
 
-agenda.define('log to slack', function(job, done) {
+agenda.define('daily worklog', function (job, done) {
   jiraloglist(config)
   done()
-});
+})
 
-agenda.on('ready', function() {
-  agenda.every('1 minutes', 'log to slack');
+agenda.on('ready', function () {
+  agenda.every(config.cron.interval, 'daily worklog')
 
   // Alternatively, you could also do:
-  //agenda.every('*/3 * * * *', 'delete old users');
+  // agenda.every('*/3 * * * *', 'delete old users');
 
-  agenda.start();
-});
+  agenda.start()
+})
