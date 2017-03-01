@@ -4,7 +4,7 @@
   "description": "Small script that uses the jira REST API to get a quick overview of how much time was logged in a given timeframe per person",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node cron.js",
     "test": "standard"
   },
   "author": "Felix Maier <leschekfm@web.de>",
