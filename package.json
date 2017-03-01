@@ -9,8 +9,12 @@
   },
   "author": "Felix Maier <leschekfm@web.de>",
   "license": "MIT",
+  "engines": {
+    "node": "7.6.0"
+  },
   "dependencies": {
     "@slack/client": "^3.6.1",
+    "agenda": "^0.9.0",
     "commander": "^2.9.0",
     "debug": "^2.3.3",
     "moment": "^2.17.0",
