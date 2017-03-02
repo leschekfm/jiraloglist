@@ -5,7 +5,7 @@ const config = rc('jiraloglist', {})
 
 const agenda = new Agenda({db: {address: config.mongo}})
 
-const jiraloglist = require('./lib/jiraloglist')
+const jiraloglist = require('./lib/jiraloglist').jll
 
 // or override the default collection name:
 // var agenda = new Agenda({db: {address: mongoConnectionString, collection: "jobCollectionName"}});
