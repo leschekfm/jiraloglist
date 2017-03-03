@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node cron.js",
-    "lint": "standard",
+    "lint": "standard --env jest",
     "test": "jest --notify"
   },
   "author": "Felix Maier <leschekfm@web.de>",
