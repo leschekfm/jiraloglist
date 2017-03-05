@@ -1,0 +1,75 @@
+{
+    "daniel.paul": {
+        "timeSpent": 22500,
+        "issues": {
+            "CMD-2840": {
+                "desc": "missing data in fb pms breaks sidebar",
+                "timeSpent": 5400
+            },
+            "CMD-2746": {
+                "desc": "Implement ticket history viewer UI (debug mode)",
+                "timeSpent": 900
+            },
+            "CMD-2744": {
+                "desc": "Add new ticket history logging in appropriate places",
+                "timeSpent": 16200
+            }
+        }
+    },
+    "patrick.krassler": {
+        "timeSpent": 18000,
+        "issues": {
+            "CMD-2840": {
+                "desc": "missing data in fb pms breaks sidebar",
+                "timeSpent": 2700
+            },
+            "CMD-2839": {
+                "desc": "Handling Time: Fix problematic edgecases",
+                "timeSpent": 4500
+            },
+            "CMD-2707": {
+                "desc": "Cron V2",
+                "timeSpent": 10800
+            }
+        }
+    },
+    "miguel.cortez": {
+        "timeSpent": 16200,
+        "issues": {
+            "CMD-2803": {
+                "desc": "Display channel for suggestion in approval folder",
+                "timeSpent": 1800
+            },
+            "CMD-2801": {
+                "desc": "Display correct user information after switching channel",
+                "timeSpent": 14400
+            }
+        }
+    },
+    "alex.smith": {
+        "timeSpent": 11400,
+        "issues": {
+            "CMD-2803": {
+                "desc": "Display channel for suggestion in approval folder",
+                "timeSpent": 3600
+            },
+            "CMD-2801": {
+                "desc": "Display correct user information after switching channel",
+                "timeSpent": 7200
+            },
+            "CMD-2767": {
+                "desc": "Improve/fix notification bar",
+                "timeSpent": 600
+            }
+        }
+    },
+    "thomas.schmidt": {
+        "timeSpent": 3600,
+        "issues": {
+            "CMD-2733": {
+                "desc": "cp posts for dark posts can not be created in processor",
+                "timeSpent": 3600
+            }
+        }
+    }
+}
