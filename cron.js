@@ -1,5 +1,6 @@
 const Agenda = require('agenda')
 const rc = require('rc')
+const moment = require('moment')
 
 const config = rc('jiraloglist', {})
 
@@ -17,7 +18,14 @@ const jiraloglist = require('./lib/jiraloglist').jll
 // var agenda = new Agenda({mongo: myMongoClient});
 
 agenda.define('daily worklog', function (job, done) {
-  jiraloglist(config)
+  let range = 1
+  let start = moment().startOf('day').subtract(1, 'd')
+  if (moment().day() === 1) { // on monday
+    start = moment().startOf('day').subtract(3, 'd')
+    range = 3
+  }
+
+  jiraloglist(config, start, range)
   done()
 })
 
