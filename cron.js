@@ -19,9 +19,9 @@ const jiraloglist = require('./lib/jiraloglist').jll
 
 agenda.define('daily worklog', function (job, done) {
   let range = 1
-  let start = moment().startOf('day').subtract(1, 'd')
+  let start = moment().startOf('day').subtract(1, 'd').add(5, 'h')
   if (moment().day() === 1) { // on monday
-    start = moment().startOf('day').subtract(3, 'd')
+    start = moment().startOf('day').subtract(3, 'd').add(5, 'h')
     range = 3
   }
 
