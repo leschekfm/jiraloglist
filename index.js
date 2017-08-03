@@ -2,7 +2,8 @@ const moment = require('moment')
 const program = require('commander')
 const rc = require('rc')
 
-const jiraloglist = require('./lib/jiraloglist').jll
+//const jiraloglist = require('./lib/jiraloglist').jll
+const jiraloglist = require('./lib/gitlabloglist').gll
 
 program
   .option('-d, --day-to-check [dayToCheck]', 'day to check in format "YYYY-MM-DD"', moment().startOf('day').subtract(1, 'd'))
