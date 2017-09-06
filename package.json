@@ -14,17 +14,17 @@
     "node": "7.6.0"
   },
   "dependencies": {
-    "@slack/client": "^3.10.0",
-    "agenda": "^0.10.0",
+    "@slack/client": "^3.12.0",
+    "agenda": "^1.0.0",
     "commander": "^2.11.0",
-    "debug": "^2.6.8",
-    "gitlab-time-tracker": "^1.5.4",
+    "debug": "^3.0.1",
+    "gitlab-time-tracker": "^1.6.5",
     "moment": "^2.18.1",
     "rc": "git://github.com/leschekfm/rc.git",
     "request": "^2.81.0",
-    "standard": "^8.6.0"
+    "standard": "^10.0.3"
   },
   "devDependencies": {
-    "jest": "^19.0.2"
+    "jest": "^21.0.1"
   }
 }
